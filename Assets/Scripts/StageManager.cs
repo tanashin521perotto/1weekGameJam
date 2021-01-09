@@ -5,7 +5,7 @@ using UnityEngine;
 public class StageManager : MonoBehaviour
 {
     // タイルの種類
-    private enum TileType
+    public enum TileType
     {
         WALL, // 壁
         GROUND, // 地面
@@ -17,6 +17,7 @@ public class StageManager : MonoBehaviour
         BLOCK_ON_TARGET, // ブロック（目的地の上）
     }
 
+
     // 方向の種類
     private enum DirectionType
     {
@@ -26,11 +27,12 @@ public class StageManager : MonoBehaviour
         LEFT, // 左
     }
 
+
     public TextAsset stageFile; // ステージ構造が記述されたテキストファイル
 
     private int rows; // 行数
     private int columns; // 列数
-    private TileType[,] tileList; // タイル情報を管理する二次元配列
+    public TileType[,] tileList; // タイル情報を管理する二次元配列
 
     public float tileSize; // タイルのサイズ
 
@@ -43,10 +45,10 @@ public class StageManager : MonoBehaviour
     private GameObject player; // プレイヤーのゲームオブジェクト
     private Vector2 middleOffset; // 中心位置
     private int blockCount; // ブロックの数
-    private bool isClear; // ゲームをクリアした場合 true
+    public bool isClear; // ゲームをクリアした場合 true
 
     // 各位置に存在するゲームオブジェクトを管理する連想配列
-    private Dictionary<GameObject, Vector2Int> gameObjectPosTable = new Dictionary<GameObject, Vector2Int>();
+    public Dictionary<GameObject, Vector2Int> gameObjectPosTable = new Dictionary<GameObject, Vector2Int>();
 
     // ゲーム開始時に呼び出される
     private void Start()
@@ -56,7 +58,7 @@ public class StageManager : MonoBehaviour
     }
 
     // タイルの情報を読み込む
-    private void LoadTileData()
+    public void LoadTileData()
     {
         // タイルの情報を一行ごとに分割
         var lines = stageFile.text.Split
@@ -130,7 +132,7 @@ public class StageManager : MonoBehaviour
                     sr.sprite = wallSprite;
 
                     // 壁の描画順を手前にする
-                    sr.sortingOrder = 0;
+                    sr.sortingOrder = 1;
 
                     // 壁の位置を設定
                     wall.transform.position = GetDisplayPosition(x, y);

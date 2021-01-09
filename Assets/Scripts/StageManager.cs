@@ -26,7 +26,7 @@ public class StageManager : MonoBehaviour
         DOWN, // 下
         LEFT, // 左
     }
-
+    Animator animator; //プレイヤーのアニメーション
 
     public TextAsset stageFile; // ステージ構造が記述されたテキストファイル
 
@@ -41,12 +41,12 @@ public class StageManager : MonoBehaviour
     public Sprite targetSprite; // 目的地のスプライト
     public Sprite playerSprite; // プレイヤーのスプライト
     public Sprite blockSprite; // ブロックのスプライト
-
-    private GameObject player; // プレイヤーのゲームオブジェクト
+    
+    public GameObject player; // プレイヤーのゲームオブジェクト
     private Vector2 middleOffset; // 中心位置
     private int blockCount; // ブロックの数
     public bool isClear; // ゲームをクリアした場合 true
-
+    
     // 各位置に存在するゲームオブジェクトを管理する連想配列
     public Dictionary<GameObject, Vector2Int> gameObjectPosTable = new Dictionary<GameObject, Vector2Int>();
 
@@ -55,6 +55,7 @@ public class StageManager : MonoBehaviour
     {
         LoadTileData(); // タイルの情報を読み込む
         CreateStage(); // ステージを作成
+        animator = player.GetComponent<Animator>();// プレイヤーのアニメーターを取得
     }
 
     // タイルの情報を読み込む
@@ -159,16 +160,16 @@ public class StageManager : MonoBehaviour
                 if (val == TileType.PLAYER)
                 {
                     // プレイヤーのゲームオブジェクトを作成
-                    player = new GameObject("player");
-
+                    //player = new GameObject("player");
+                    player = Instantiate(player, Vector3.zero, Quaternion.identity);
                     // プレイヤーにスプライトを描画する機能を追加
-                    sr = player.AddComponent<SpriteRenderer>();
+                    //sr = player.AddComponent<SpriteRenderer>();
 
                     // プレイヤーのスプライトを設定
-                    sr.sprite = playerSprite;
+                    //sr.sprite = playerSprite;
 
                     // プレイヤーの描画順を手前にする
-                    sr.sortingOrder = 2;
+                    //sr.sortingOrder = 2;
 
                     // プレイヤーの位置を設定
                     player.transform.position = GetDisplayPosition(x, y);
@@ -255,27 +256,32 @@ public class StageManager : MonoBehaviour
         // 上矢印が押された場合
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
+            animator.SetInteger("direction", 3); //animatorに渡す
             // プレイヤーが上に移動できるか検証
             TryMovePlayer(DirectionType.UP);
         }
         // 右矢印が押された場合
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
+            animator.SetInteger("direction", 2);//animatorに渡す
             // プレイヤーが右に移動できるか検証
             TryMovePlayer(DirectionType.RIGHT);
         }
         // 下矢印が押された場合
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            animator.SetInteger("direction", 0); //animatorに渡す
             // プレイヤーが下に移動できるか検証
             TryMovePlayer(DirectionType.DOWN);
         }
         // 左矢印が押された場合
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
+            animator.SetInteger("direction", 1); //animatorに渡す
             // プレイヤーが左に移動できるか検証
             TryMovePlayer(DirectionType.LEFT);
         }
+
     }
 
     // 指定された方向にプレイヤーが移動できるか検証
@@ -329,7 +335,10 @@ public class StageManager : MonoBehaviour
                 UpdateGameObjectPosition(currentPlayerPos);
 
                 // プレイヤーを移動
-                player.transform.position = GetDisplayPosition(nextPlayerPos.x, nextPlayerPos.y);
+                //player.transform.position = GetDisplayPosition(nextPlayerPos.x, nextPlayerPos.y);
+                Vector3 nowPos = new Vector3(currentPlayerPos.x, currentPlayerPos.y, 0);
+                Vector3 nextPos = new Vector3(nextPlayerPos.x, nextPlayerPos.y, 0);
+                player.transform.position = Vector3.Lerp(nowPos, nextPos, 10f);
 
                 // プレイヤーの位置を更新
                 gameObjectPosTable[player] = nextPlayerPos;

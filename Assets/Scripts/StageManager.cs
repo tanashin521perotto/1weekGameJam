@@ -98,28 +98,26 @@ public class StageManager : MonoBehaviour
         {
             for (int x = 0; x < columns; x++)
             {
-                var val = tileList[x, y];
 
-                // 何も無い場所は無視
-                
+                var val = tileList[x, y];
 
                 // タイルの名前に行番号と列番号を付与
                 var name = "tile" + y + "_" + x;
 
-                // タイルのゲームオブジェクトを作成
-                var tile = new GameObject(name);
+                // 地面のゲームオブジェクトを作成
+                var ground = new GameObject(name);
 
-                // タイルにスプライトを描画する機能を追加
-                var sr = tile.AddComponent<SpriteRenderer>();
+                // 地面にスプライトを描画する機能を追加
+                var sr = ground.AddComponent<SpriteRenderer>();
 
-                // タイルのスプライトを設定
-                //sr.sprite = groundSprite;
+                // 地面のスプライトを設定
+                sr.sprite = groundSprite;
 
-                // タイルの位置を設定
-                //tile.transform.position = GetDisplayPosition(x, y);
+                // 地面の位置を設定
+                ground.transform.position = GetDisplayPosition(x, y);
 
 
-                //壁
+                //壁の描画処理
                 if (val == TileType.WALL) 
                 {
                     // 壁のゲームオブジェクトを作成
@@ -137,7 +135,7 @@ public class StageManager : MonoBehaviour
                     // 壁の位置を設定
                     wall.transform.position = GetDisplayPosition(x, y);
                 }
-                // 目的地の場合
+                // 目的地の描画処理
                 if (val == TileType.TARGET)
                 {
                     // 目的地のゲームオブジェクトを作成
@@ -155,7 +153,7 @@ public class StageManager : MonoBehaviour
                     // 目的地の位置を設定
                     destination.transform.position = GetDisplayPosition(x, y);
                 }
-                // プレイヤーの場合
+                // プレイヤーの描画処理
                 if (val == TileType.PLAYER)
                 {
                     // プレイヤーのゲームオブジェクトを作成
@@ -176,7 +174,7 @@ public class StageManager : MonoBehaviour
                     // プレイヤーを連想配列に追加
                     gameObjectPosTable.Add(player, new Vector2Int(x, y));
                 }
-                // ブロックの場合
+                // ブロックの描画処理
                 else if (val == TileType.BLOCK)
                 {
                     // ブロックの数を増やす

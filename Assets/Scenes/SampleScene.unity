@@ -236,10 +236,10 @@ MonoBehaviour:
   stageFile: {fileID: 4900000, guid: d8b104bb86c5d8f48aedd5bd65a8adaf, type: 3}
   tileSize: 0.64
   wallSprite: {fileID: 21300000, guid: c8f3a55695accf4479c82f3bd81dc1af, type: 3}
-  groundSprite: {fileID: 21300000, guid: 0d6ac8e7e34c78c4ebed5dcf72c2b716, type: 3}
-  targetSprite: {fileID: 21300000, guid: bd1c14e029bc54143be7e61e89e097d3, type: 3}
-  playerSprite: {fileID: 21300000, guid: 9289f972e33ede0488ba5fd4a0f6d3e8, type: 3}
-  blockSprite: {fileID: 21300000, guid: 8bfa70e07055b8742a63dc9f15c121a2, type: 3}
+  groundSprite: {fileID: 21300000, guid: 8d5f2363486453248b415fd1bacdc3a8, type: 3}
+  targetSprite: {fileID: 21300000, guid: f42cb2b7cfaf3644cbf05d22dca6aa44, type: 3}
+  playerSprite: {fileID: 21300000, guid: 766a73babf7fcfa449b497bea6f7d530, type: 3}
+  blockSprite: {fileID: 21300000, guid: 5d83ce77f9bc5fe46b1438c0a4a3b75e, type: 3}
 --- !u!4 &1791850581
 Transform:
   m_ObjectHideFlags: 0

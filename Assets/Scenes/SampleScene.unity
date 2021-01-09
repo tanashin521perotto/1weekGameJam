@@ -204,6 +204,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &926700765
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 926700767}
+  - component: {fileID: 926700766}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &926700766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926700765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8a0d10c838532d45894eea956c8559e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stage: {fileID: 1791850580}
+--- !u!4 &926700767
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926700765}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1791850579
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,13 +277,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91fbd668934aab0429167cefe068051e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageFile: {fileID: 4900000, guid: ff6359e39a57b7a40961773151b814c6, type: 3}
-  tileSize: 0.64
-  wallSprite: {fileID: 21300000, guid: c8f3a55695accf4479c82f3bd81dc1af, type: 3}
-  groundSprite: {fileID: 21300000, guid: 8d5f2363486453248b415fd1bacdc3a8, type: 3}
-  targetSprite: {fileID: 21300000, guid: f42cb2b7cfaf3644cbf05d22dca6aa44, type: 3}
-  playerSprite: {fileID: 21300000, guid: 766a73babf7fcfa449b497bea6f7d530, type: 3}
-  blockSprite: {fileID: 21300000, guid: 5d83ce77f9bc5fe46b1438c0a4a3b75e, type: 3}
+  stageFile: {fileID: 4900000, guid: d8b104bb86c5d8f48aedd5bd65a8adaf, type: 3}
+  prefabs:
+  - {fileID: 7799195154261227920, guid: d2748a13c53995a4c8e0da0d55272dd5, type: 3}
+  - {fileID: 4018361899998720456, guid: 281324e932ddfaf498b77540ffbe9a51, type: 3}
+  - {fileID: 9123513322383182187, guid: ebb6af5009915bd4ba22aed8f5a3c332, type: 3}
+  - {fileID: 72185857691106036, guid: 296414d8934393149a8d0de4bcf5cf53, type: 3}
+  - {fileID: 6545148708710421836, guid: 8dfc50fe0e012af438040a293fc55384, type: 3}
+  - {fileID: 609498180305133040, guid: 7b256470f0607b04da22ebdec7804ce2, type: 3}
+  player: {fileID: 0}
 --- !u!4 &1791850581
 Transform:
   m_ObjectHideFlags: 0

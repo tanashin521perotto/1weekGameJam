@@ -7,7 +7,7 @@ public class StageManager : MonoBehaviour
     // タイルの種類
     private enum TileType
     {
-        NONE, // 何も無い
+        WALL, // 壁
         GROUND, // 地面
         TARGET, // 目的地
         PLAYER, // プレイヤー
@@ -34,6 +34,7 @@ public class StageManager : MonoBehaviour
 
     public float tileSize; // タイルのサイズ
 
+    public Sprite wallSprite; // ブロックのスプライト
     public Sprite groundSprite; // 地面のスプライト
     public Sprite targetSprite; // 目的地のスプライト
     public Sprite playerSprite; // プレイヤーのスプライト
@@ -100,7 +101,7 @@ public class StageManager : MonoBehaviour
                 var val = tileList[x, y];
 
                 // 何も無い場所は無視
-                if (val == TileType.NONE) continue;
+                
 
                 // タイルの名前に行番号と列番号を付与
                 var name = "tile" + y + "_" + x;
@@ -112,11 +113,30 @@ public class StageManager : MonoBehaviour
                 var sr = tile.AddComponent<SpriteRenderer>();
 
                 // タイルのスプライトを設定
-                sr.sprite = groundSprite;
+                //sr.sprite = groundSprite;
 
                 // タイルの位置を設定
-                tile.transform.position = GetDisplayPosition(x, y);
+                //tile.transform.position = GetDisplayPosition(x, y);
 
+
+                //壁
+                if (val == TileType.WALL) 
+                {
+                    // 壁のゲームオブジェクトを作成
+                    var wall = new GameObject("wall");
+
+                    // 壁にスプライトを描画する機能を追加
+                    sr = wall.AddComponent<SpriteRenderer>();
+
+                    // 壁のスプライトを設定
+                    sr.sprite = wallSprite;
+
+                    // 壁の描画順を手前にする
+                    sr.sortingOrder = 0;
+
+                    // 壁の位置を設定
+                    wall.transform.position = GetDisplayPosition(x, y);
+                }
                 // 目的地の場合
                 if (val == TileType.TARGET)
                 {
@@ -221,7 +241,7 @@ public class StageManager : MonoBehaviour
     {
         if (0 <= pos.x && pos.x < columns && 0 <= pos.y && pos.y < rows)
         {
-            return tileList[pos.x, pos.y] != TileType.NONE;
+            return tileList[pos.x, pos.y] != TileType.WALL;
         }
         return false;
     }

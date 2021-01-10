@@ -67,9 +67,13 @@ public class PlayerManager : MonoBehaviour
 
     }
 
-    public void Move(Vector2 position, DIRECTION direction)
+    public void Move(Vector2 currentPosition, Vector2 position, DIRECTION direction)
     {
-        transform.position = position;
+        //transform.position = position;
+        Vector3 nowPos = new Vector3(currentPosition.x, currentPosition.y, 0);
+        Vector3 targetPos = new Vector3(position.x, position.y, 0);
+        transform.position = Vector3.Lerp(nowPos, targetPos, Time.deltaTime);
+        Debug.Log(direction);
     }
 
     void MoveTo(DIRECTION direction)
@@ -93,7 +97,7 @@ public class PlayerManager : MonoBehaviour
             stage.UpdateBlockPosition(nextPlayerPositionOnTile, nextBlockPositionOnTile);
         }
         stage.UpdateTileTableForPlayer(currentPlayerPositionOnTile, nextPlayerPositionOnTile);
-        this.Move(stage.GetScreenPositionFromTileTable(nextPlayerPositionOnTile), direction);              // 3.次の位置にプレイヤーを移動
+        this.Move(stage.GetScreenPositionFromTileTable(currentPlayerPositionOnTile), stage.GetScreenPositionFromTileTable(nextPlayerPositionOnTile), direction);              // 3.次の位置にプレイヤーを移動
         stage.moveObjPositionOnTile[this.gameObject] = nextPlayerPositionOnTile;                           // 4.タイル情報も更新
     }
 

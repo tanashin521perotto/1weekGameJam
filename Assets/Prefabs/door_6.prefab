@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 2517610441150596833}
   - component: {fileID: 3829453866315824353}
   m_Layer: 8
-  m_Name: door_5
+  m_Name: door_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,7 +165,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -651738432764746280, guid: 6130ee0f022394d5e9c2864e5e58798d,
+  m_Sprite: {fileID: 3625643625379786523, guid: 6130ee0f022394d5e9c2864e5e58798d,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

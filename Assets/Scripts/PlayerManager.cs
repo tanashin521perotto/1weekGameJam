@@ -67,19 +67,33 @@ public class PlayerManager : MonoBehaviour
 
     }
 
-    public void Move(Vector2 currentPosition, Vector2 position, DIRECTION direction)
+    public void Move(Vector2 position, DIRECTION direction)
     {
-        //transform.position = position;
-        Vector3 nowPos = new Vector3(currentPosition.x, currentPosition.y, 0);
-        Vector3 targetPos = new Vector3(position.x, position.y, 0);
-        transform.position = Vector3.Lerp(nowPos, targetPos, Time.deltaTime);
-        Debug.Log(direction);
+        transform.position = position;
     }
 
     void MoveTo(DIRECTION direction)
     {
         Vector2Int currentPlayerPositionOnTile = stage.moveObjPositionOnTile[this.gameObject];               // 1.現在の位置を取得
         Vector2Int nextPlayerPositionOnTile = GetNextPositionOnTile(currentPlayerPositionOnTile, direction); // 2.次の位置を取得
+
+        //Playerの移動先がDOORのとき
+        if (stage.IsDoor(nextPlayerPositionOnTile))
+        {
+            return;//処理をここで終了させる
+        }
+        //Playerの移動先がREVOLVING_DOORのとき
+        if (stage.IsRevolvingDoor(nextPlayerPositionOnTile))
+        {
+            Vector2Int nextDoorPositionOnTile = GetNextPositionDoor(nextPlayerPositionOnTile, direction);
+            //doorの移動先がWALLもしくはBLOCKのとき
+            if (stage.IsWall(nextDoorPositionOnTile) || stage.IsBlock(nextDoorPositionOnTile))
+            {
+                return;
+            }
+            stage.UpdateDoorPosition(nextPlayerPositionOnTile, nextDoorPositionOnTile);
+
+        }
         //Playerの移動先がWALLのとき
         if (stage.IsWall(nextPlayerPositionOnTile))
         {
@@ -97,7 +111,7 @@ public class PlayerManager : MonoBehaviour
             stage.UpdateBlockPosition(nextPlayerPositionOnTile, nextBlockPositionOnTile);
         }
         stage.UpdateTileTableForPlayer(currentPlayerPositionOnTile, nextPlayerPositionOnTile);
-        this.Move(stage.GetScreenPositionFromTileTable(currentPlayerPositionOnTile), stage.GetScreenPositionFromTileTable(nextPlayerPositionOnTile), direction);              // 3.次の位置にプレイヤーを移動
+        this.Move(stage.GetScreenPositionFromTileTable(nextPlayerPositionOnTile), direction);              // 3.次の位置にプレイヤーを移動
         stage.moveObjPositionOnTile[this.gameObject] = nextPlayerPositionOnTile;                           // 4.タイル情報も更新
     }
 
@@ -113,6 +127,17 @@ public class PlayerManager : MonoBehaviour
                 return currentPosition + Vector2Int.left;
             case DIRECTION.RIGHT:
                 return currentPosition + Vector2Int.right;
+        }
+        return currentPosition;
+    }
+    Vector2Int GetNextPositionDoor(Vector2Int currentPosition, DIRECTION direction)
+    {
+        switch (direction)
+        {
+            case DIRECTION.UP:
+                return currentPosition + new Vector2Int(-1,-1);
+            case DIRECTION.DOWN:
+                return currentPosition + new Vector2Int(-1, 1);
         }
         return currentPosition;
     }

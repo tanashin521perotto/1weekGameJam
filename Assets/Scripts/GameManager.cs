@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         {
             //ゲーム終了　⇒リスタート
             isClear = true;
-            Invoke("Restart", 1f);
+            //Invoke("Restart", 1f);
         }
     }
 

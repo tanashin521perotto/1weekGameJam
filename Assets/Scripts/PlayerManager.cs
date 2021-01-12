@@ -76,6 +76,24 @@ public class PlayerManager : MonoBehaviour
     {
         Vector2Int currentPlayerPositionOnTile = stage.moveObjPositionOnTile[this.gameObject];               // 1.現在の位置を取得
         Vector2Int nextPlayerPositionOnTile = GetNextPositionOnTile(currentPlayerPositionOnTile, direction); // 2.次の位置を取得
+
+        //Playerの移動先がDOORのとき
+        if (stage.IsDoor(nextPlayerPositionOnTile))
+        {
+            return;//処理をここで終了させる
+        }
+        //Playerの移動先がREVOLVING_DOORのとき
+        if (stage.IsRevolvingDoor(nextPlayerPositionOnTile))
+        {
+            Vector2Int nextDoorPositionOnTile = GetNextPositionDoor(nextPlayerPositionOnTile, direction);
+            //doorの移動先がWALLもしくはBLOCKのとき
+            if (stage.IsWall(nextDoorPositionOnTile) || stage.IsBlock(nextDoorPositionOnTile))
+            {
+                return;
+            }
+            stage.UpdateDoorPosition(nextPlayerPositionOnTile, nextDoorPositionOnTile);
+
+        }
         //Playerの移動先がWALLのとき
         if (stage.IsWall(nextPlayerPositionOnTile))
         {
@@ -109,6 +127,17 @@ public class PlayerManager : MonoBehaviour
                 return currentPosition + Vector2Int.left;
             case DIRECTION.RIGHT:
                 return currentPosition + Vector2Int.right;
+        }
+        return currentPosition;
+    }
+    Vector2Int GetNextPositionDoor(Vector2Int currentPosition, DIRECTION direction)
+    {
+        switch (direction)
+        {
+            case DIRECTION.UP:
+                return currentPosition + new Vector2Int(-1,-1);
+            case DIRECTION.DOWN:
+                return currentPosition + new Vector2Int(-1, 1);
         }
         return currentPosition;
     }

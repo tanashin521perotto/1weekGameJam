@@ -13,8 +13,8 @@ public class StageManager : MonoBehaviour
         BLOCK,        //3 移動させるもの
         PLAYER,       //4 プレイヤー
         Goal,         //5 ゴール
-        DOOR, //6 ドア
-        REVOLVING_DOOR, //7 ドア回転部
+        //DOOR, //6 ドア
+        //REVOLVING_DOOR, //7 ドア回転部
 
         BLOCK_ON_POINT,   // プレイヤー（目的地の上）
         PLAYER_ON_POINT,  // ブロック（目的地の上）
@@ -93,11 +93,13 @@ public class StageManager : MonoBehaviour
                     BlockCount++;
                     moveObjPositionOnTile.Add(obj, position);
                 }
+                /*
                 //回転扉を追加
                 if (tileType == TILE_TYPE.REVOLVING_DOOR)
                 {
                     moveObjPositionOnTile.Add(obj, position);
                 }
+                */
             }
         }
     }
@@ -110,7 +112,7 @@ public class StageManager : MonoBehaviour
     {
         return new Vector2(position.x * tileSize - centerPosition.x, -(position.y * tileSize - centerPosition.y));
     }
-
+    /*
     // 指定された位置のタイルがDoorなら true を返す
     public bool IsDoor(Vector2Int position)
     {
@@ -129,6 +131,7 @@ public class StageManager : MonoBehaviour
         }
         return false;
     }
+    */
     // 指定された位置のタイルがWallなら true を返す
     public bool IsWall(Vector2Int position)
     {
@@ -189,6 +192,7 @@ public class StageManager : MonoBehaviour
             tileTable[nextBlockPosition.x, nextBlockPosition.y] = TILE_TYPE.BLOCK;
         }
     }
+    /*
     // Doorを移動させる
     public void UpdateDoorPosition(Vector2Int currentDoorPosition, Vector2Int nextDoorPosition)
     {
@@ -206,6 +210,7 @@ public class StageManager : MonoBehaviour
         tileTable[nextDoorPosition.x, nextDoorPosition.y] = TILE_TYPE.REVOLVING_DOOR;
         
     }
+    */
     public void UpdateTileTableForPlayer(Vector2Int currentPosition, Vector2Int nextPosition)
     {
         //tileTableの更新

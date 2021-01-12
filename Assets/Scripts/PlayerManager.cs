@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour
     public GameManager gameManager = default;
 
     bool hasMochi;
-
+    public static bool atDoor = false;
     public int mochiCount;
 
     private void Start()
@@ -76,7 +76,7 @@ public class PlayerManager : MonoBehaviour
     {
         Vector2Int currentPlayerPositionOnTile = stage.moveObjPositionOnTile[this.gameObject];               // 1.現在の位置を取得
         Vector2Int nextPlayerPositionOnTile = GetNextPositionOnTile(currentPlayerPositionOnTile, direction); // 2.次の位置を取得
-
+        /*
         //Playerの移動先がDOORのとき
         if (stage.IsDoor(nextPlayerPositionOnTile))
         {
@@ -94,6 +94,7 @@ public class PlayerManager : MonoBehaviour
             stage.UpdateDoorPosition(nextPlayerPositionOnTile, nextDoorPositionOnTile);
 
         }
+        */
         //Playerの移動先がWALLのとき
         if (stage.IsWall(nextPlayerPositionOnTile))
         {
@@ -110,6 +111,13 @@ public class PlayerManager : MonoBehaviour
             }
             stage.UpdateBlockPosition(nextPlayerPositionOnTile, nextBlockPositionOnTile);
         }
+        
+        //蝶番と接触時
+        if (DoorManager.atHinge)
+        {
+            return;
+        }
+        
         stage.UpdateTileTableForPlayer(currentPlayerPositionOnTile, nextPlayerPositionOnTile);
         this.Move(stage.GetScreenPositionFromTileTable(nextPlayerPositionOnTile), direction);              // 3.次の位置にプレイヤーを移動
         stage.moveObjPositionOnTile[this.gameObject] = nextPlayerPositionOnTile;                           // 4.タイル情報も更新
@@ -130,6 +138,7 @@ public class PlayerManager : MonoBehaviour
         }
         return currentPosition;
     }
+    /*
     Vector2Int GetNextPositionDoor(Vector2Int currentPosition, DIRECTION direction)
     {
         switch (direction)
@@ -140,5 +149,13 @@ public class PlayerManager : MonoBehaviour
                 return currentPosition + new Vector2Int(-1, 1);
         }
         return currentPosition;
+    }
+    */
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Door")
+        {
+            atDoor = true;
+        }
     }
 }

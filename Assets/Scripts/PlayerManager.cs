@@ -111,13 +111,13 @@ public class PlayerManager : MonoBehaviour
             }
             stage.UpdateBlockPosition(nextPlayerPositionOnTile, nextBlockPositionOnTile);
         }
-        
+        /*
         //蝶番と接触時
         if (DoorManager.atHinge)
         {
             return;
         }
-        
+        */
         stage.UpdateTileTableForPlayer(currentPlayerPositionOnTile, nextPlayerPositionOnTile);
         this.Move(stage.GetScreenPositionFromTileTable(nextPlayerPositionOnTile), direction);              // 3.次の位置にプレイヤーを移動
         stage.moveObjPositionOnTile[this.gameObject] = nextPlayerPositionOnTile;                           // 4.タイル情報も更新

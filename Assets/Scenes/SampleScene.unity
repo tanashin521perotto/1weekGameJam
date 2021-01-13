@@ -157,7 +157,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 0}
+  m_BackGroundColor: {r: 0.57254905, g: 0.7411765, b: 0.47058827, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -327,5 +327,27 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7210773175282952821, guid: e3bc83064ecd84bcbb699579cbe83877,
+        type: 3}
+      propertyPath: prefabs.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210773175282952821, guid: e3bc83064ecd84bcbb699579cbe83877,
+        type: 3}
+      propertyPath: stageFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 67f021a3799b74e3db18840c1f8d00f7, type: 3}
+    - target: {fileID: 7210773175282952821, guid: e3bc83064ecd84bcbb699579cbe83877,
+        type: 3}
+      propertyPath: prefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 2170974762428461653, guid: 647d11973077a4d178bd16225ac76d78,
+        type: 3}
+    - target: {fileID: 7210773175282952821, guid: e3bc83064ecd84bcbb699579cbe83877,
+        type: 3}
+      propertyPath: prefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 4212769239181776618, guid: a51d71115c49744a3ba063cc2d0a66c3,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3bc83064ecd84bcbb699579cbe83877, type: 3}

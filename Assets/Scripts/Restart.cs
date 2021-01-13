@@ -19,22 +19,22 @@ public class Restart : MonoBehaviour
     {
         if (isClear)
         {
-            Debug.Log("クリア");
+         //   Debug.Log("クリア");
             sr.sprite = sprites[3];
         }
         else if (Set.SetCount == 0)
         {
-            Debug.Log("ゼロ");
+//            Debug.Log("ゼロ");
             sr.sprite = sprites[0];
         }
         else if(Set.SetCount == 1)
         {
-            Debug.Log("イチ");
+      //      Debug.Log("イチ");
             sr.sprite = sprites[1];
         }
         else if(Set.SetCount == 2)
         {
-            Debug.Log("ニ");
+        //    Debug.Log("ニ");
             sr.sprite = sprites[2];
         }
 

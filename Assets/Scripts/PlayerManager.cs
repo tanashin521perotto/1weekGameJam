@@ -70,13 +70,13 @@ public class PlayerManager : MonoBehaviour
         //Playerの移動先がREVOLVING_DOORのとき
         if (stage.IsRevolvingDoor(nextPlayerPositionOnTile))
         {
-            Vector2Int nextDoorPositionOnTile = GetNextPositionDoor(nextPlayerPositionOnTile, direction);
+            Vector2Int nextDoorPositionOnTile = GetNextPositionDoor(nextPlayerPositionOnTile, direction, currentPlayerPositionOnTile);
             //doorの移動先がWALLもしくはBLOCKのとき
-            if (stage.IsWall(nextDoorPositionOnTile) || stage.IsBlock(nextDoorPositionOnTile))
+            if (stage.IsWall(nextDoorPositionOnTile) || stage.IsBlock(nextDoorPositionOnTile) || stage.IsDoor(nextDoorPositionOnTile))
             {
                 return;
             }
-            stage.UpdateDoorPosition(nextPlayerPositionOnTile, nextDoorPositionOnTile);
+            stage.UpdateRevolvingDoorPosition(nextPlayerPositionOnTile, nextDoorPositionOnTile);
 
         }
         //Playerの移動先がWALLのとき
@@ -117,14 +117,43 @@ public class PlayerManager : MonoBehaviour
         }
         return currentPosition;
     }
-    Vector2Int GetNextPositionDoor(Vector2Int currentPosition, DIRECTION direction)
+    Vector2Int GetNextPositionDoor(Vector2Int currentPosition, DIRECTION direction, Vector2Int player)
     {
-        switch (direction)
+        Debug.Log("GetNextPositionDoor:" + direction);
+        Vector2Int center = stage.GetDoorCenter(currentPosition);
+        float angle = Vector2.SignedAngle(currentPosition - center, player - center);
+        if (angle > 0)
         {
-            case DIRECTION.UP:
-                return currentPosition + new Vector2Int(-1,-1);
-            case DIRECTION.DOWN:
-                return currentPosition + new Vector2Int(-1, 1);
+            switch (direction)
+            {
+                case DIRECTION.UP:
+                    return currentPosition + new Vector2Int(-1, -1);
+                case DIRECTION.DOWN:
+                    return currentPosition + new Vector2Int(1, 1);
+                case DIRECTION.LEFT:
+                    return currentPosition + new Vector2Int(-1, 1);
+                case DIRECTION.RIGHT:
+                    return currentPosition + new Vector2Int(1, -1);
+            }
+        }
+        else if (angle < 0)
+        {
+            switch (direction)
+            {
+                case DIRECTION.UP:
+                    return currentPosition + new Vector2Int(1, -1);
+                case DIRECTION.DOWN:
+                    return currentPosition + new Vector2Int(-1, 1);
+                case DIRECTION.LEFT:
+                    return currentPosition + new Vector2Int(-1, -1);
+                case DIRECTION.RIGHT:
+                    return currentPosition + new Vector2Int(1, 1);
+            }
+        }
+        else
+        {
+            return center;
+            Debug.Log("なんとかする");
         }
         return currentPosition;
     }

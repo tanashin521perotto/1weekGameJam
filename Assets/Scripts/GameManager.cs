@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     // ゲームクリア処理
     public void CheckAllClear()
     {
-        Debug.Log("SetCount:" + Set.SetCount);
+//        Debug.Log("SetCount:" + Set.SetCount);
         //Debug.Log(StageManager.ClearNum);
         if (isClear)
         {

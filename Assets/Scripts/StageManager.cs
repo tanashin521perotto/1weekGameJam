@@ -131,7 +131,7 @@ public class StageManager : MonoBehaviour
                 }
                 
                 //回転扉を追加
-                if (tileType == TILE_TYPE.DOOR)
+                if (tileType == TILE_TYPE.REVOLVING_DOOR)
                 {
                     moveObjPositionOnTile.Add(obj, position);
                 }
@@ -159,6 +159,7 @@ public class StageManager : MonoBehaviour
     // 指定された位置のタイルがDOORなら true を返す
     public bool IsDoor(Vector2Int position)
     {
+        Debug.Log(tileTable[position.x, position.y]);
         if (tileTable[position.x, position.y] == TILE_TYPE.DOOR)
         {
             return true;
@@ -242,7 +243,7 @@ public class StageManager : MonoBehaviour
         }
     }
     // Doorを移動させる
-    public void UpdateDoorPosition(Vector2Int currentDoorPosition, Vector2Int nextDoorPosition)
+    public void UpdateRevolvingDoorPosition(Vector2Int currentDoorPosition, Vector2Int nextDoorPosition)
     {
         // Doorを取得
         GameObject door = GetBlockObjAt(currentDoorPosition);
@@ -255,7 +256,7 @@ public class StageManager : MonoBehaviour
         //tileTableの更新
         //次にDoorが置かれる場所をDoorとする
         
-        tileTable[nextDoorPosition.x, nextDoorPosition.y] = TILE_TYPE.DOOR;
+        tileTable[nextDoorPosition.x, nextDoorPosition.y] = TILE_TYPE.REVOLVING_DOOR;
         
     }
     
@@ -354,7 +355,27 @@ public class StageManager : MonoBehaviour
         return false;
     }
 
+    public Vector2Int GetDoorCenter(Vector2Int point)
+    {
+        Vector2Int[] around =
+        {
+            point+Vector2Int.up,
+            point+Vector2Int.right,
+            point+Vector2Int.down,
+            point+Vector2Int.left,
+        };
 
+        foreach (Vector2Int search in around)
+        {
+            if (tileTable[search.x, search.y] == TILE_TYPE.DOOR)
+            {
+                return search;
+            }
+        }
+        Debug.Log("エラー");
+
+        return Vector2Int.zero;
+    }
 
 
 }

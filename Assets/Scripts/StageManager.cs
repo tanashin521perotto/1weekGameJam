@@ -27,7 +27,7 @@ public class StageManager : MonoBehaviour
     }
     public static int ClearNum = 0;
 
-    public TextAsset stageFile; 　// ステージ構造が記述されたテキストファイル
+    public TextAsset[] stageFiles; 　// ステージ構造が記述されたテキストファイル
     public GameObject[] prefabs;  // ゲームオブジェクトをプレハブしリスト化
     public PlayerManager player; // playermanager
 
@@ -48,10 +48,10 @@ public class StageManager : MonoBehaviour
 
 
     // タイルの情報を読み込む
-    public void LoadTileData()
+    public void LoadTileData(int num)
     {
         // タイルの列数を計算
-        string[] lines = stageFile.text.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
+        string[] lines = stageFiles[num].text.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
         // [X] 列の長さを取得(lines[0]で1行取得してその中のsplitを,区切りで分けた場合の長さ)
         int columns = lines[0].Split(new[] { ',' }).Length;
         // [Y] 行の長さを取得

@@ -14,13 +14,13 @@ public enum DIRECTION
 
 public class GameManager : MonoBehaviour
 {
-    
+    public static int num = 0;
     public StageManager stage = default;
     public static bool isClear;
 
     void Start()
     {
-        stage.LoadTileData();
+        stage.LoadTileData(num);
         stage.CreateStage();
     }
 

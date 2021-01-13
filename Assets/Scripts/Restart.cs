@@ -60,6 +60,10 @@ public class Restart : MonoBehaviour
                 Debug.Log("Clear!");
                 playerSprite.enabled = false;
                 Invoke("RestartGame", 2f);
+                if(GameManager.num <= 14)
+                {
+                    GameManager.num++;
+                }
             }
         }
     }

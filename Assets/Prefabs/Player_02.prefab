@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: -5702291813212979237, guid: 3eb6855ce2bd346c3a447fe628d33846,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -118,6 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stage: {fileID: 0}
   gameManager: {fileID: 0}
+  rs: {fileID: 0}
   defaultPosition: {x: 0, y: 0}
   mochiCount: 0
 --- !u!61 &-322849529443705904

@@ -5,15 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class Restart : MonoBehaviour
 {
+    public static SpriteRenderer playerSprite;
     public StageManager stage = default;
 
-    public Sprite[] sprites;
+    public Sprite[] sprites;　//ゴールの画像
     SpriteRenderer sr;
-    bool isClear = false;
+    public static bool isClear = false;
     void Start()
     {
+        if (isClear)
+        {
+            //playerSprite.enabled = true;
+            isClear = false;
+        }
+        playerSprite = GameObject.Find("Player_02(Clone)").GetComponent<SpriteRenderer>();
         sr = gameObject.GetComponent<SpriteRenderer>();
-        Debug.Log(sr.sprite);
+        //Debug.Log(sr.sprite);
     }
     void Update()
     {
@@ -48,8 +55,10 @@ public class Restart : MonoBehaviour
             Debug.Log(collision.gameObject.tag);
             if (Set.SetCount == 2)
             {
+                SoundManager.instance.PlaySE(2);
                 isClear = true;
                 Debug.Log("Clear!");
+                playerSprite.enabled = false;
                 Invoke("RestartGame", 2f);
             }
         }
@@ -59,5 +68,7 @@ public class Restart : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Set.SetCount = 0;
+        //playerSprite.sprite = sprites[4];
+        //
     }
 }

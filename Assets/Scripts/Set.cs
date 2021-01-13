@@ -16,6 +16,7 @@ public class Set : MonoBehaviour
         {
             SetCount++;
             isSet = true;
+            SoundManager.instance.PlaySE(0);
         }
     }
     void OnCollisionExit2D(Collision2D collision)
@@ -24,6 +25,7 @@ public class Set : MonoBehaviour
         {
             SetCount--;
             isSet = false;
+            SoundManager.instance.PlaySE(1);
         }
     }
 }

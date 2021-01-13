@@ -7,7 +7,7 @@ public class PlayerManager : MonoBehaviour
 
     public StageManager stage = default;
     public GameManager gameManager = default;
-
+    public Restart rs;
     public Vector2Int defaultPosition; //現在の位置情報
 
     bool hasMochi;
@@ -22,7 +22,7 @@ public class PlayerManager : MonoBehaviour
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         stage = GameObject.Find("StageManager").GetComponent<StageManager>();
-
+        rs = GameObject.Find("Goal(Clone)").GetComponent<Restart>();
         hasMochi = false;
     }
 
@@ -46,7 +46,10 @@ public class PlayerManager : MonoBehaviour
         }
 
         gameManager.CheckAllClear();
-        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            rs.RestartGame();
+        }
         
     }
 
@@ -61,7 +64,11 @@ public class PlayerManager : MonoBehaviour
     {
         currentPlayerPositionOnTile = stage.moveObjPositionOnTile[this.gameObject];               // 1.現在の位置を取得
         nextPlayerPositionOnTile = GetNextPositionOnTile(currentPlayerPositionOnTile, direction); // 2.次の位置を取得
-
+        //クリアした時
+        if (Restart.isClear)
+        {
+            return;
+        }
         //Playerの移動先がDOORのとき
         if (stage.IsDoor(nextPlayerPositionOnTile))
         {
@@ -89,7 +96,7 @@ public class PlayerManager : MonoBehaviour
         {
             Vector2Int nextBlockPositionOnTile = GetNextPositionOnTile(nextPlayerPositionOnTile, direction);
             //Blockの移動先がWALLもしくはBLOCKのとき
-            if (stage.IsWall(nextBlockPositionOnTile) || stage.IsBlock(nextBlockPositionOnTile))
+            if (stage.IsWall(nextBlockPositionOnTile) || stage.IsBlock(nextBlockPositionOnTile) || stage.IsRevolvingDoor(nextBlockPositionOnTile) || stage.IsDoor(nextBlockPositionOnTile))
             {
                 return;
             }
@@ -153,7 +160,7 @@ public class PlayerManager : MonoBehaviour
         else
         {
             return center;
-            Debug.Log("なんとかする");
+            //Debug.Log("なんとかする");
         }
         return currentPosition;
     }

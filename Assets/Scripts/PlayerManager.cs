@@ -128,9 +128,18 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log("GetNextPositionDoor:" + direction);
         Vector2Int center = stage.GetDoorCenter(currentPosition);
+        Vector2Int blockPos = stage.GetSlopedBlock(currentPosition);
         float angle = Vector2.SignedAngle(currentPosition - center, player - center);
+        float sloped = Vector2.SignedAngle(currentPosition - center, blockPos - center);
+        Debug.Log("sloped:" + sloped);
+        
         if (angle > 0)
         {
+            if (sloped == -45 && blockPos != new Vector2Int(0,0))
+            {
+                Debug.Log("blockPos:" + blockPos);
+                return center;
+            }
             switch (direction)
             {
                 case DIRECTION.UP:
@@ -145,6 +154,11 @@ public class PlayerManager : MonoBehaviour
         }
         else if (angle < 0)
         {
+            if(sloped == 45 && blockPos != new Vector2Int(0, 0))
+            {
+                Debug.Log("blockPos:" + blockPos);
+                return center;
+            }
             switch (direction)
             {
                 case DIRECTION.UP:

@@ -378,5 +378,23 @@ public class StageManager : MonoBehaviour
         return Vector2Int.zero;
     }
 
+    public Vector2Int GetSlopedBlock(Vector2Int point)
+    {
+        Vector2Int[] around =
+        {
+            point+Vector2Int.up,
+            point+Vector2Int.right,
+            point+Vector2Int.down,
+            point+Vector2Int.left,
+        };
 
+        foreach (Vector2Int search in around)
+        {
+            if (tileTable[search.x, search.y] == TILE_TYPE.BLOCK)
+            {
+                return search;
+            }
+        }
+        return Vector2Int.zero;
+    }
 }

@@ -119,7 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stage: {fileID: 7210773175282952821, guid: e3bc83064ecd84bcbb699579cbe83877, type: 3}
   sprites:
-  - {fileID: 21300000, guid: 8d5f2363486453248b415fd1bacdc3a8, type: 3}
+  - {fileID: 21300000, guid: bb1865df5e1fe4710a098dd5f184deeb, type: 3}
   - {fileID: 21300000, guid: 523c5689505cd45a0ae1286d5ec298f2, type: 3}
   - {fileID: 21300000, guid: c68fb2bbb5495406395805bb0c30e585, type: 3}
   - {fileID: 21300000, guid: 6b61bb7de842842eb83693e40f82498a, type: 3}

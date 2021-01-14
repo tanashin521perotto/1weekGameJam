@@ -48,6 +48,7 @@ public class PlayerManager : MonoBehaviour
         gameManager.CheckAllClear();
         if (Input.GetKeyDown(KeyCode.R))
         {
+            SoundManager.instance.PlaySE(1);
             rs.RestartGame();
         }
         
@@ -84,7 +85,7 @@ public class PlayerManager : MonoBehaviour
                 return;
             }
             stage.UpdateRevolvingDoorPosition(nextPlayerPositionOnTile, nextDoorPositionOnTile);
-
+            SoundManager.instance.PlaySE(5);
         }
         //Playerの移動先がWALLのとき
         if (stage.IsWall(nextPlayerPositionOnTile))
@@ -101,12 +102,14 @@ public class PlayerManager : MonoBehaviour
                 return;
             }
             stage.UpdateBlockPosition(nextPlayerPositionOnTile, nextBlockPositionOnTile);
+            SoundManager.instance.PlaySE(6);
         }
         
 
         stage.UpdateTileTableForPlayer(currentPlayerPositionOnTile, nextPlayerPositionOnTile);
         this.Move(stage.GetScreenPositionFromTileTable(nextPlayerPositionOnTile), direction);              // 3.次の位置にプレイヤーを移動
         stage.moveObjPositionOnTile[this.gameObject] = nextPlayerPositionOnTile;                           // 4.タイル情報も更新
+        
     }
 
     Vector2Int GetNextPositionOnTile(Vector2Int currentPosition, DIRECTION direction)

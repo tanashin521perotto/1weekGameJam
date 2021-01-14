@@ -58,9 +58,9 @@ public class Restart : MonoBehaviour
             {
                 SoundManager.instance.PlaySE(2);
                 isClear = true;
+                playerSprite.enabled = false;
                 if (GameManager.num < StageManager.maxStage - 1)
                 {
-                    playerSprite.enabled = false;
                     Invoke("RestartGame", 2f);
                     GameManager.num++;
 

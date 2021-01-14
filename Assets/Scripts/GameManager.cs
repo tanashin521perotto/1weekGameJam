@@ -14,37 +14,47 @@ public enum DIRECTION
 
 public class GameManager : MonoBehaviour
 {
-    
+    public static int num = 0;
     public StageManager stage = default;
-    bool isClear;
+    public static bool isClear;
 
     void Start()
     {
-        stage.LoadTileData();
+        stage.LoadTileData(num);
         stage.CreateStage();
     }
 
     // ゲームクリア処理
     public void CheckAllClear()
     {
+//        Debug.Log("SetCount:" + Set.SetCount);
+        //Debug.Log(StageManager.ClearNum);
         if (isClear)
         {
             return;
         }
-        if (stage.IsAllClear())
+        //        if (stage.IsAllClear() && stage.IsGoalClear())
+        //stage.IsAllClear();
+        /*
+        if (StageManager.ClearNum >= 2 && stage.IsGoalClear())
         {
             //ゲーム終了　⇒リスタート
             isClear = true;
-            //Invoke("Restart", 1f);
+            Invoke("Restart", 1f);
         }
+        */
     }
+    
 
     // リスタート処理
-    void Restart()
+    public void Restart()
     {
+
         isClear = false;
         string currentScene = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentScene);
     }
+
+
 
 }

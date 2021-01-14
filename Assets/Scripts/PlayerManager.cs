@@ -7,45 +7,26 @@ public class PlayerManager : MonoBehaviour
 
     public StageManager stage = default;
     public GameManager gameManager = default;
+    public Restart rs;
+    public Vector2Int defaultPosition; //現在の位置情報
 
     bool hasMochi;
 
     public int mochiCount;
 
+    public static Vector2Int currentPlayerPositionOnTile;               // 1.現在の位置を取得
+    public static Vector2Int nextPlayerPositionOnTile; // 2.次の位置を取得
+
+
     private void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         stage = GameObject.Find("StageManager").GetComponent<StageManager>();
-
+        rs = GameObject.Find("Goal(Clone)").GetComponent<Restart>();
         hasMochi = false;
     }
 
-    private void Update()
-    {
-        if (InputDirection() == true)
-        {
-            if (hasMochi == false)
-            {
-                Debug.Log("もちを取得");
-                mochiCount++;
-                if (mochiCount > 3)
-                {
-                    hasMochi = true;
-                }
-            }
-            else if (hasMochi == true)
-            {
-                Debug.Log("ゴール");
-                gameManager.CheckAllClear();
-            }
-
-        }
-
-        gameManager.CheckAllClear();
-
-    }
-
-    bool InputDirection()
+    public void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -63,9 +44,16 @@ public class PlayerManager : MonoBehaviour
         {
             MoveTo(DIRECTION.RIGHT);
         }
-        return false;
 
+        gameManager.CheckAllClear();
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            rs.RestartGame();
+        }
+        
     }
+
+   
 
     public void Move(Vector2 position, DIRECTION direction)
     {
@@ -74,9 +62,13 @@ public class PlayerManager : MonoBehaviour
 
     void MoveTo(DIRECTION direction)
     {
-        Vector2Int currentPlayerPositionOnTile = stage.moveObjPositionOnTile[this.gameObject];               // 1.現在の位置を取得
-        Vector2Int nextPlayerPositionOnTile = GetNextPositionOnTile(currentPlayerPositionOnTile, direction); // 2.次の位置を取得
-
+        currentPlayerPositionOnTile = stage.moveObjPositionOnTile[this.gameObject];               // 1.現在の位置を取得
+        nextPlayerPositionOnTile = GetNextPositionOnTile(currentPlayerPositionOnTile, direction); // 2.次の位置を取得
+        //クリアした時
+        if (Restart.isClear)
+        {
+            return;
+        }
         //Playerの移動先がDOORのとき
         if (stage.IsDoor(nextPlayerPositionOnTile))
         {
@@ -85,13 +77,13 @@ public class PlayerManager : MonoBehaviour
         //Playerの移動先がREVOLVING_DOORのとき
         if (stage.IsRevolvingDoor(nextPlayerPositionOnTile))
         {
-            Vector2Int nextDoorPositionOnTile = GetNextPositionDoor(nextPlayerPositionOnTile, direction);
+            Vector2Int nextDoorPositionOnTile = GetNextPositionDoor(nextPlayerPositionOnTile, direction, currentPlayerPositionOnTile);
             //doorの移動先がWALLもしくはBLOCKのとき
-            if (stage.IsWall(nextDoorPositionOnTile) || stage.IsBlock(nextDoorPositionOnTile))
+            if (stage.IsWall(nextDoorPositionOnTile) || stage.IsBlock(nextDoorPositionOnTile) || stage.IsDoor(nextDoorPositionOnTile) || stage.IsRevolvingDoor(nextDoorPositionOnTile))
             {
                 return;
             }
-            stage.UpdateDoorPosition(nextPlayerPositionOnTile, nextDoorPositionOnTile);
+            stage.UpdateRevolvingDoorPosition(nextPlayerPositionOnTile, nextDoorPositionOnTile);
 
         }
         //Playerの移動先がWALLのとき
@@ -104,12 +96,14 @@ public class PlayerManager : MonoBehaviour
         {
             Vector2Int nextBlockPositionOnTile = GetNextPositionOnTile(nextPlayerPositionOnTile, direction);
             //Blockの移動先がWALLもしくはBLOCKのとき
-            if (stage.IsWall(nextBlockPositionOnTile) || stage.IsBlock(nextBlockPositionOnTile))
+            if (stage.IsWall(nextBlockPositionOnTile) || stage.IsBlock(nextBlockPositionOnTile) || stage.IsRevolvingDoor(nextBlockPositionOnTile) || stage.IsDoor(nextBlockPositionOnTile))
             {
                 return;
             }
             stage.UpdateBlockPosition(nextPlayerPositionOnTile, nextBlockPositionOnTile);
         }
+        
+
         stage.UpdateTileTableForPlayer(currentPlayerPositionOnTile, nextPlayerPositionOnTile);
         this.Move(stage.GetScreenPositionFromTileTable(nextPlayerPositionOnTile), direction);              // 3.次の位置にプレイヤーを移動
         stage.moveObjPositionOnTile[this.gameObject] = nextPlayerPositionOnTile;                           // 4.タイル情報も更新
@@ -130,14 +124,57 @@ public class PlayerManager : MonoBehaviour
         }
         return currentPosition;
     }
-    Vector2Int GetNextPositionDoor(Vector2Int currentPosition, DIRECTION direction)
+    Vector2Int GetNextPositionDoor(Vector2Int currentPosition, DIRECTION direction, Vector2Int player)
     {
-        switch (direction)
+        Debug.Log("GetNextPositionDoor:" + direction);
+        Vector2Int center = stage.GetDoorCenter(currentPosition);
+        Vector2Int blockPos = stage.GetSlopedBlock(currentPosition);
+        float angle = Vector2.SignedAngle(currentPosition - center, player - center);
+        float sloped = Vector2.SignedAngle(currentPosition - center, blockPos - center);
+        Debug.Log("sloped:" + sloped);
+        
+        if (angle > 0)
         {
-            case DIRECTION.UP:
-                return currentPosition + new Vector2Int(-1,-1);
-            case DIRECTION.DOWN:
-                return currentPosition + new Vector2Int(-1, 1);
+            if (sloped == -45 && blockPos != new Vector2Int(0,0))
+            {
+                Debug.Log("blockPos:" + blockPos);
+                return center;
+            }
+            switch (direction)
+            {
+                case DIRECTION.UP:
+                    return currentPosition + new Vector2Int(-1, -1);
+                case DIRECTION.DOWN:
+                    return currentPosition + new Vector2Int(1, 1);
+                case DIRECTION.LEFT:
+                    return currentPosition + new Vector2Int(-1, 1);
+                case DIRECTION.RIGHT:
+                    return currentPosition + new Vector2Int(1, -1);
+            }
+        }
+        else if (angle < 0)
+        {
+            if(sloped == 45 && blockPos != new Vector2Int(0, 0))
+            {
+                Debug.Log("blockPos:" + blockPos);
+                return center;
+            }
+            switch (direction)
+            {
+                case DIRECTION.UP:
+                    return currentPosition + new Vector2Int(1, -1);
+                case DIRECTION.DOWN:
+                    return currentPosition + new Vector2Int(-1, 1);
+                case DIRECTION.LEFT:
+                    return currentPosition + new Vector2Int(-1, -1);
+                case DIRECTION.RIGHT:
+                    return currentPosition + new Vector2Int(1, 1);
+            }
+        }
+        else
+        {
+            return center;
+            //Debug.Log("なんとかする");
         }
         return currentPosition;
     }

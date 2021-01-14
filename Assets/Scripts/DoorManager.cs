@@ -25,7 +25,7 @@ public class DoorManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("collision!");
+        //Debug.Log("collision!");
 
         //壁やブロックと接触
         if (collision.gameObject.tag == "block")

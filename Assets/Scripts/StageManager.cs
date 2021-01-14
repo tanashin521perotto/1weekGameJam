@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class StageManager : MonoBehaviour
 {
+
     // タイルの種類
     public enum TILE_TYPE
     {
@@ -12,23 +15,27 @@ public class StageManager : MonoBehaviour
         BLOCK_POINT,  //2 ブロックを置くところ
         BLOCK,        //3 移動させるもの
         PLAYER,       //4 プレイヤー
-        Goal,         //5 ゴール
-        DOOR, //6 ドア
+        GOAL,         //5 ゴール
+        DOOR,          //6 ドア
         REVOLVING_DOOR, //7 ドア回転部
 
         BLOCK_ON_POINT,   // プレイヤー（目的地の上）
         PLAYER_ON_POINT,  // ブロック（目的地の上）
+
+        GOLA_ON_POINT,   // 　プレーヤーが
         
     }
-
-    public TextAsset stageFile; 　// ステージ構造が記述されたテキストファイル
+    public static int ClearNum = 0;
+    public static int maxStage;
+    public TextAsset[] stageFiles; 　// ステージ構造が記述されたテキストファイル
     public GameObject[] prefabs;  // ゲームオブジェクトをプレハブしリスト化
     public PlayerManager player; // playermanager
 
     TILE_TYPE[,] tileTable;　　// タイル情報を管理する二次元配列
     float tileSize;　　　　　　// タイルのサイズ
-    int BlockCount;　　　　　　// ブロックの数
+    int BlockCount;      // ブロックの数
 
+    bool isAllClear = false;
     Vector2 centerPosition;
     TILE_TYPE tileType;
 
@@ -36,15 +43,16 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-
+        maxStage = stageFiles.Length;
+//        maxStage = 3;
     }
 
 
     // タイルの情報を読み込む
-    public void LoadTileData()
+    public void LoadTileData(int num)
     {
         // タイルの列数を計算
-        string[] lines = stageFile.text.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
+        string[] lines = stageFiles[num].text.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
         // [X] 列の長さを取得(lines[0]で1行取得してその中のsplitを,区切りで分けた場合の長さ)
         int columns = lines[0].Split(new[] { ',' }).Length;
         // [Y] 行の長さを取得
@@ -57,7 +65,35 @@ public class StageManager : MonoBehaviour
             string[] values = lines[y].Split(new[] { ',' });
             for (int x = 0; x < columns; x++)
             {
-                tileTable[x, y] = (TILE_TYPE)int.Parse(values[x]);
+                //tileTable[x, y] = (TILE_TYPE)int.Parse(values[x]);
+                switch (values[x])
+                {
+                    //BlockTypeが追加されたらcaseを対応させていく
+                    case "0":
+                        tileTable[x, y] = TILE_TYPE.WALL;
+                        break;
+                    case "1":
+                        tileTable[x, y] = TILE_TYPE.GROUND;
+                        break;
+                    case "2":
+                        tileTable[x, y] = TILE_TYPE.BLOCK_POINT;
+                        break;
+                    case "3":
+                        tileTable[x, y] = TILE_TYPE.BLOCK;
+                        break;
+                    case "4":
+                        tileTable[x, y] = TILE_TYPE.PLAYER;
+                        break;
+                    case "5":
+                        tileTable[x, y] = TILE_TYPE.GOAL;
+                        break;
+                    case "6":
+                        tileTable[x, y] = TILE_TYPE.DOOR;
+                        break;
+                    case "7":
+                        tileTable[x, y] = TILE_TYPE.REVOLVING_DOOR;
+                        break;
+                }
 
             }
         }
@@ -74,6 +110,7 @@ public class StageManager : MonoBehaviour
         {
             for (int x = 0; x < tileTable.GetLength(0); x++)
             {
+
                 Vector2Int position = new Vector2Int(x, y);
                 //　groundを予め敷き詰める
                 GameObject ground = Instantiate(prefabs[(int)TILE_TYPE.GROUND]);
@@ -93,15 +130,24 @@ public class StageManager : MonoBehaviour
                     BlockCount++;
                     moveObjPositionOnTile.Add(obj, position);
                 }
+                
                 //回転扉を追加
                 if (tileType == TILE_TYPE.REVOLVING_DOOR)
                 {
                     moveObjPositionOnTile.Add(obj, position);
                 }
+                /*
+                if (tileType == TILE_TYPE.GOAL)
+                {
+                //    GameObject goal = Instantiate(prefabs[(int)TILE_TYPE.GOAL]);
+                    moveObjPositionOnTile.Add(obj, position);
+                }
+                */
             }
         }
     }
 
+    //-----⬇当たり判定みたいなもの⬇---------
 
     //GetScreenPositionFromTileTable();の関数を使ってタイルを敷き詰めるサイズを算出
     //GetScreenPositionFromTileTableが画面内のサイズの比率を定義している
@@ -111,16 +157,17 @@ public class StageManager : MonoBehaviour
         return new Vector2(position.x * tileSize - centerPosition.x, -(position.y * tileSize - centerPosition.y));
     }
 
-    // 指定された位置のタイルがDoorなら true を返す
+    // 指定された位置のタイルがDOORなら true を返す
     public bool IsDoor(Vector2Int position)
     {
+        //Debug.Log(tileTable[position.x, position.y]);
         if (tileTable[position.x, position.y] == TILE_TYPE.DOOR)
         {
             return true;
         }
         return false;
     }
-    // 指定された位置のタイルがRevolving_Doorなら true を返す
+    // 指定された位置のタイルがRevolving_Door REVOLVING_DOORなら true を返す
     public bool IsRevolvingDoor(Vector2Int position)
     {
         if (tileTable[position.x, position.y] == TILE_TYPE.REVOLVING_DOOR)
@@ -129,7 +176,8 @@ public class StageManager : MonoBehaviour
         }
         return false;
     }
-    // 指定された位置のタイルがWallなら true を返す
+   
+    // 指定された位置のタイルがWALLなら true を返す
     public bool IsWall(Vector2Int position)
     {
         if (tileTable[position.x, position.y] == TILE_TYPE.WALL)
@@ -139,7 +187,7 @@ public class StageManager : MonoBehaviour
         return false;
     }
 
-    // 指定された位置のタイルがBlockなら true を返す
+    // 指定された位置のタイルがBLOCKなら true を返す
     public bool IsBlock(Vector2Int position)
     {
         if (tileTable[position.x, position.y] == TILE_TYPE.BLOCK)
@@ -152,6 +200,12 @@ public class StageManager : MonoBehaviour
         }
         return false;
     }
+
+    //------------------------------
+
+
+    //--------⬇描画の処理⬇------------
+
 
     // // 指定された位置に存在するゲームオブジェクトを返します
     GameObject GetBlockObjAt(Vector2Int position)
@@ -190,7 +244,7 @@ public class StageManager : MonoBehaviour
         }
     }
     // Doorを移動させる
-    public void UpdateDoorPosition(Vector2Int currentDoorPosition, Vector2Int nextDoorPosition)
+    public void UpdateRevolvingDoorPosition(Vector2Int currentDoorPosition, Vector2Int nextDoorPosition)
     {
         // Doorを取得
         GameObject door = GetBlockObjAt(currentDoorPosition);
@@ -206,6 +260,8 @@ public class StageManager : MonoBehaviour
         tileTable[nextDoorPosition.x, nextDoorPosition.y] = TILE_TYPE.REVOLVING_DOOR;
         
     }
+    
+
     public void UpdateTileTableForPlayer(Vector2Int currentPosition, Vector2Int nextPosition)
     {
         //tileTableの更新
@@ -230,9 +286,15 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    //------------------------------------
+
     //Blockの数とBLOCK_ON_POINTの数が一致するとクリア！
     public bool IsAllClear()
     {
+        if (isAllClear)
+        {
+            return true;
+        }
         int clearCount = 0;
         for (int y = 0; y < tileTable.GetLength(1); y++)
         {
@@ -240,25 +302,99 @@ public class StageManager : MonoBehaviour
             {
                 if (tileTable[x, y] == TILE_TYPE.BLOCK_ON_POINT)
                 {
+                    Debug.Log("カウントBLOCK_ON_POINT");
                     clearCount++;
                 }
+                
             }
         }
+        //ClearNum++;
         if (BlockCount == clearCount)
         {
+            isAllClear = true;
             return true;
         }
+        
         return false;
     }
 
-    /*
-    public bool IsBlockTypeOf(TILE_TYPE type, Vector2Int position)
+    
+    public bool IsGoalClear()
     {
-        if (tileTable[position.x, position.y].TILE_TYPE.tileType)
+        int playerCount = 0;
+        
+        for (int y = 0; y < tileTable.GetLength(1); y++)
+        {
+            for (int x = 0; x < tileTable.GetLength(0); x++)
+            {
+                if (tileTable[x, y] == TILE_TYPE.GOAL)
+                {
+                    Debug.Log("カウントGOAL");
+                    playerCount++;
+                }
+            }
+        }
+        /*
+        Debug.Log("IsGoalClear");
+        int x = PlayerManager.currentPlayerPositionOnTile.x;
+        int y = PlayerManager.currentPlayerPositionOnTile.y;
+        Debug.Log(x + ":" + y);
+        Debug.Log(tileTable[x, y]);
+        //if (tileTable[x, y] == TILE_TYPE.GOAL)
+        //{
+            Debug.Log("x=" + x);
+            Debug.Log("カウントGOAL");
+            playerCount++;
+        //}
+        //ClearNum++;
+        */
+        if (BlockCount == playerCount)
         {
             return true;
         }
+        
         return false;
-    }*/
+    }
 
+    public Vector2Int GetDoorCenter(Vector2Int point)
+    {
+        Vector2Int[] around =
+        {
+            point+Vector2Int.up,
+            point+Vector2Int.right,
+            point+Vector2Int.down,
+            point+Vector2Int.left,
+        };
+
+        foreach (Vector2Int search in around)
+        {
+            if (tileTable[search.x, search.y] == TILE_TYPE.DOOR)
+            {
+                return search;
+            }
+        }
+        Debug.Log("エラー");
+
+        return Vector2Int.zero;
+    }
+
+    public Vector2Int GetSlopedBlock(Vector2Int point)
+    {
+        Vector2Int[] around =
+        {
+            point+Vector2Int.up,
+            point+Vector2Int.right,
+            point+Vector2Int.down,
+            point+Vector2Int.left,
+        };
+
+        foreach (Vector2Int search in around)
+        {
+            if (tileTable[search.x, search.y] == TILE_TYPE.BLOCK)
+            {
+                return search;
+            }
+        }
+        return Vector2Int.zero;
+    }
 }

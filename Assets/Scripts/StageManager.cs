@@ -43,8 +43,8 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-//        maxStage = stageFiles.Length;
-        maxStage = 3;
+        maxStage = stageFiles.Length;
+//        maxStage = 3;
     }
 
 

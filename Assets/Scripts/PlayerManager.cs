@@ -79,7 +79,7 @@ public class PlayerManager : MonoBehaviour
         {
             Vector2Int nextDoorPositionOnTile = GetNextPositionDoor(nextPlayerPositionOnTile, direction, currentPlayerPositionOnTile);
             //doorの移動先がWALLもしくはBLOCKのとき
-            if (stage.IsWall(nextDoorPositionOnTile) || stage.IsBlock(nextDoorPositionOnTile) || stage.IsDoor(nextDoorPositionOnTile))
+            if (stage.IsWall(nextDoorPositionOnTile) || stage.IsBlock(nextDoorPositionOnTile) || stage.IsDoor(nextDoorPositionOnTile) || stage.IsRevolvingDoor(nextDoorPositionOnTile))
             {
                 return;
             }

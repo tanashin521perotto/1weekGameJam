@@ -7,10 +7,11 @@ public class Restart : MonoBehaviour
 {
     public static SpriteRenderer playerSprite;
     public StageManager stage = default;
-
+    
     public Sprite[] sprites;　//ゴールの画像
     SpriteRenderer sr;
     public static bool isClear = false;
+    public static bool isFinish = false;
     void Start()
     {
         if (isClear)
@@ -57,12 +58,20 @@ public class Restart : MonoBehaviour
             {
                 SoundManager.instance.PlaySE(2);
                 isClear = true;
-                Debug.Log("Clear!");
-                playerSprite.enabled = false;
-                Invoke("RestartGame", 2f);
-                if(GameManager.num <= 14)
+                if (GameManager.num < StageManager.maxStage)
                 {
+                    Debug.Log("Clear!");
+                    playerSprite.enabled = false;
+                    Invoke("RestartGame", 2f);
                     GameManager.num++;
+                    
+                }
+                else if (GameManager.num == StageManager.maxStage)
+                {
+                    isFinish = true;
+                    SceneManager.LoadScene("Clear");
+                    Set.SetCount = 0;
+                    GameManager.num = 0;
                 }
             }
         }

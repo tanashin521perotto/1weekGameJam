@@ -26,7 +26,7 @@ public class StageManager : MonoBehaviour
         
     }
     public static int ClearNum = 0;
-
+    public static int maxStage;
     public TextAsset[] stageFiles; 　// ステージ構造が記述されたテキストファイル
     public GameObject[] prefabs;  // ゲームオブジェクトをプレハブしリスト化
     public PlayerManager player; // playermanager
@@ -43,7 +43,8 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-
+//        maxStage = stageFiles.Length;
+        maxStage = 3;
     }
 
 
@@ -159,7 +160,7 @@ public class StageManager : MonoBehaviour
     // 指定された位置のタイルがDOORなら true を返す
     public bool IsDoor(Vector2Int position)
     {
-        Debug.Log(tileTable[position.x, position.y]);
+        //Debug.Log(tileTable[position.x, position.y]);
         if (tileTable[position.x, position.y] == TILE_TYPE.DOOR)
         {
             return true;

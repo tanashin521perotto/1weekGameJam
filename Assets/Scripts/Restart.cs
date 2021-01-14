@@ -58,15 +58,15 @@ public class Restart : MonoBehaviour
             {
                 SoundManager.instance.PlaySE(2);
                 isClear = true;
-                if (GameManager.num < StageManager.maxStage)
+                if (GameManager.num < StageManager.maxStage - 1)
                 {
-                    Debug.Log("Clear!");
                     playerSprite.enabled = false;
                     Invoke("RestartGame", 2f);
                     GameManager.num++;
-                    
+
+                    Debug.Log(GameManager.num);
                 }
-                else if (GameManager.num == StageManager.maxStage)
+                else if (GameManager.num == StageManager.maxStage - 1)
                 {
                     isFinish = true;
                     SceneManager.LoadScene("Clear");

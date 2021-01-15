@@ -36,8 +36,9 @@ public class ClearSceneManager : MonoBehaviour
         {
             if (Restart.isFinish)
             {
-                Restart.isFinish = false;
-                SceneManager.LoadScene("Clear");
+                //Restart.isFinish = false;
+                //SceneManager.LoadScene("Clear");
+                return;
             }
             else
             {

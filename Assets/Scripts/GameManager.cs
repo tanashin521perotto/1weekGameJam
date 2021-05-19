@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum DIRECTION
 {
@@ -14,6 +15,8 @@ public enum DIRECTION
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] Text stageText;
+
     public static int num = 0;
     public StageManager stage = default;
     public static bool isClear;
@@ -22,6 +25,7 @@ public class GameManager : MonoBehaviour
     {
         stage.LoadTileData(num);
         stage.CreateStage();
+        stageText.text = "ステージ " + (num + 1);
     }
 
     // ゲームクリア処理
